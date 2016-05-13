@@ -1,0 +1,68 @@
+{% extends "main.html" %}
+{% block navbar %}
+	{% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+
+	<!--
+	publicCatalogs
+	<div class="row banner main">
+		<div class="col-md-12">
+			<h1>Catalogs</h1>
+		</div>
+	</div>
+	-->
+
+	<div class = 'flash'>
+		      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+	</div>
+
+
+	<div class="grid js-isotope"
+		data-isotope-options='{ "itemSelector": ".grid-item-catalogs", "layoutMode": "masonry" }'>
+	{% for catalog in catalogs %}
+		<div class="grid-item-catalogs">
+			<a href="{{url_for('showCatalog', catalog_id = catalog.id)}}">
+				<h3 class="catalog-name">{{catalog.name}}</h3>
+				{# set the catalog thumbnail to be catalog.catalog_thumbnail unless it doesn't exist, then use catalog.header_image #}
+				{% if catalog.catalog_thumbnail %}
+					<img src="{{ url_for('show_file', id = catalog.catalog_thumbnail, type = 'item_image_tn') }}" class="img-responsive img-rounded center-block">
+				{% elif catalog.header_image_tn %}
+					<img src="{{ url_for('show_file', id = catalog.id, type = 'header_image_tn') }}" class="img-responsive img-rounded center-block">
+				{% else %}
+					{# there is no image for the catalog thumnail!!! #}
+				{% endif %}
+			</a>
+		</div>
+	{% endfor %}
+	</div>
+	<br clear="all">
+
+	{# isotope fix image sizing #}
+	<script>
+	var $grid = $('.grid').imagesLoaded( function() {
+		// init Isotope after all images have loaded
+		$grid.isotope({
+			// options...
+		});
+	});
+	</script>
+	{# end isotope section #}
+
+	<div class="row text-right">
+		<a href="#top">Back to top</a> |
+		<a href="{{ url_for('allCatalogsJSON') }}">View page in JSON</a>
+	</div>
+	<script src="{{ url_for('static', filename='salvattore.min.js.txt') }}"></script>
+{% endblock %}

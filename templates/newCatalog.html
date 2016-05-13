@@ -1,0 +1,65 @@
+{% extends "main.html" %}
+{% block navbar %}
+	{% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+
+<!-- color picker from jscolor.com -->
+<script src="{{ url_for('static', filename='jscolor.min.js') }}"></script>
+<script>
+	$( document ).ready( function() {
+		$( ".jscolor" ).change( function() {
+			var setColor = $(".jscolor").val();
+			// alert ( setColor );
+			$ ( 'h1' ).css('color', '#' + setColor);
+		});
+	});
+
+</script>
+
+	<div class="row banner menu">
+		<div class="col-md-12">
+			<h1>New Catalog</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-1 padding-top">
+			<form action="#" method = "post" enctype="multipart/form-data" >
+				<div class="form-group">
+					<h3><label for="name">Name:</label></h3>
+					<input type="text" class="form-control" name="name" >
+				</div>
+
+				<div class="form-group">
+					<h3><label for="header-color">Change header color:</label></h3>
+					<input class="jscolor" type="text" name="header_color" maxlength="6" value="">
+				</div>
+
+				<div class="form-group">
+					<h3><label for="use-thumnail">Catalog style:</h3>
+					<input type="radio" name="catalog_image_type" value="item_image_tn" checked>
+						Use thumbnails with links to full size images. <br />
+					<input type="radio" name="catalog_image_type" value="item_image">
+						Use full-size image - no thumbnails or links.
+				</form>
+
+				<div class="form-group">
+					<h3><label for="upload">Upload a header image:</label></h3>
+					{# browse button #}
+					<input class="btn btn-lg btn-block" type='file' name='file'>
+					{# submit #}
+					<button type="submit" class="btn btn-lg btn-block btn-primary" id="submit" type="submit">
+						<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>Submit Changes
+					</button>
+					{# cancel #}
+					<a href='{{ url_for('showCatalogs') }}'>
+						<button type="button" class="btn btn-default btn-block delete">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Cancel
+						</button>
+					</a>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

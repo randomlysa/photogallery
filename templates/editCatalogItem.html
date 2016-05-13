@@ -1,0 +1,64 @@
+{% extends "main.html" %}
+{% block navbar %}
+	{% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+
+	<div class="row banner menu img-rounded" >
+		<div class="row banner menu img-rounded" style="background-image: url('{{ url_for('show_file', id = catalog_id, type = 'header_image') }}')">
+			<h1>Edit Catalog Item</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-1 padding-top">
+			<form action="#" method = "post" enctype="multipart/form-data">
+				<div class="form-group">
+					<h3><label for="name">Name:</label></h3>
+					<input type ="text" maxlength="100" class="form-control" name="name" value="{{item.name }}">
+				</div.
+
+				<div class="form-group">
+					<h3><label for="description">Description:</label></h3>
+					<textarea class="form-control" maxlength="250" rows="3" name="description">{{item.description}}</textarea>
+				</div>
+
+				<hr />
+				{% if item.item_image %}
+						<h3><label for="upload">Upload an image to replace the current image:</label></h3>
+						<img src="{{ url_for('show_file', id = item.id, type = 'item_image') }}" 	class="img-responsive img-rounded" >
+
+					<div class="form-group">
+						<input class="btn btn-lg btn-block" type="file" name="file">
+							<button type="submit" class="btn btn-lg btn-block btn-primary" id="submit" type="submit">
+								<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>Submit Changes
+							</button>
+
+						<a href='{{url_for('showCatalog', catalog_id = catalog_id)}}'>
+							<button type="button" class="btn btn-default btn-block delete">
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Cancel
+							</button>
+						</a>
+					</div>
+				{% endif %}
+				{% if not item.item_image %}
+					<div class="form-group">
+						<h3><label for="upload">Upload an image for this item:</label></h3>
+						<input class="btn btn-lg btn-block" type="file" name="file">
+
+						<button type="submit" class="btn btn-lg btn-block btn-primary" id="submit" type="submit">
+							<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>Submit Changes
+						</button>
+
+						<a href='{{url_for('showCatalog', catalog_id = catalog_id)}}'>
+							<button type="button" class="btn btn-default btn-block delete">
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Cancel
+							</button>
+						</a>
+					</div>
+				{% endif %}
+
+			</form>
+		</div>
+	</div>
+{% endblock %}

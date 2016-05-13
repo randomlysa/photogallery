@@ -1,0 +1,146 @@
+{% extends "main.html" %}
+{% block navbar %}
+	{% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+	<!-- privateCatalog -->
+	{% if catalog.header_image %}
+		<div class="row banner menu" style="background-image: url('{{ url_for('show_file', id = catalog.id, type = 'header_image') }}')">
+	{% else %}
+		<div class="row banner menu">
+	{% endif %}
+		<div>
+			<h1 {% if catalog.header_color %}style="color: #{{catalog.header_color}};"{% endif %}>{{ catalog.name }}
+				<figure class="creator">
+					<img src="{{ url_for('static', filename='blank_user.gif') }}">
+					<figcaption>Catalog creator's name goes here</figcaption>
+				</figure>
+			</h1>
+		</div>
+	</div>
+
+	<div class="row banner">
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<ul class="flash">
+				{% for message in messages %}
+					<li> <strong> {{ message }} </strong> </li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
+	</div>
+
+
+	{# if there are no items, suggest the user makes one #}
+	{% if not items %}
+		<div style="width: 100%; height: 300px; text-align: center; padding: 50px;">
+			<h1>
+				there are no items in this catalog!<br>
+				go add some!
+			</h1>
+			<a href="{{url_for('newCatalogItem', catalog_id = catalog.id )}}">
+				<button type="button" class="btn btn-lg" id="new-menu-item">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add Catalog Item
+				</button>
+			</a>
+		</div>
+	{% endif %}
+
+	{# hide the header if there are no items #}
+	{% if items %}
+		<h2>Items</h2>
+	{% endif %}
+
+	{# begin show items #}
+	{# set some variables #}
+		{% if catalog.catalog_image_type == 'item_image_tn' %}
+			{% set setItemSelector = "grid-item-catalog-tn" %}
+		{% endif %}
+
+		{% if catalog.catalog_image_type == 'item_image' %}
+			{% set setItemSelector = "grid-item-catalog-img" %}
+		{% endif %}
+	{# end variables ... i thought there'd be more #}
+
+	<div class="grid js-isotope row"
+		data-isotope-options='{ "itemSelector": ".{{setItemSelector}}", "layoutMode": "fitRows"}'>
+		{% if items !=[] %}
+				{% for i in items %}
+					{# select which class to use - thumbnails or full size images #}
+							<div class="{{setItemSelector}}">
+					{# end class select #}
+
+						{% if i.item_image %}
+							{# if the image is a thumbnail, make a link to the full size image #}
+							{% if catalog.catalog_image_type == "item_image_tn" %}
+							<a
+								data-lightbox="gallery"
+								data-title="{{i.name}}"
+								href="{{ url_for('show_file', id = i.id, type = 'item_image') }}"
+								>
+							{% endif %}
+							{# end make link for thumbnail #}
+
+							<img src="{{ url_for('show_file', id = i.id, type = catalog.catalog_image_type) }}"
+							class="img-responsive img-rounded center-block" >
+						{% endif %}
+								</a>
+
+						<h3>
+							{{i.name}}
+
+							<div class="btn-group">
+								<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+								</button>
+								<ul class="dropdown-menu">
+									{% if i.item_image %}
+										<li><a href="{{url_for('setItemAsThumb', catalog_id = catalog.id, item_id = i.id)}}">Set as catalog thumbnail</a></li>
+									{% endif %}
+									<li><a href="{{url_for('menuItemJSON', catalog_id = catalog.id, item_id = i.id)}}">View JSON</a></li>
+									<li role="separator" class="divider"></li>
+									<li><a href='{{url_for('editCatalogItem', catalog_id = catalog.id, item_id=i.id ) }}'>Edit</a></li>
+									<li><a href='{{url_for('deleteCatalogItem', catalog_id = catalog.id, item_id=i.id ) }}'>Delete</a></li>
+								</ul>
+							</div>
+						</h3>
+
+						<p>{{i.description}}</p>
+
+					</div>
+				{% endfor %}
+		{% endif %}
+	</div>
+	{# end show items #}
+
+	{# isotope fix image sizing #}
+	<script>
+		$(document).ready( function() {
+			// init Isotope after all images have loaded
+			var $grid = $('.grid').imagesLoaded( function() {
+				$grid.isotope({
+					itemSelector: '.{{setItemSelector}}',
+					percentPosition: true,
+					masonry: {
+						columnWidth: '.grid-sizer'
+					}
+				});
+			});
+		});
+	</script>
+	{# end isotope section #}
+
+	<div class="navbar text-right">
+		<div class="container-fluid">
+			<a href="#top">Back to top</a> |
+			<a href="{{url_for('showCatalogs')}}">Show All Catalogs</a> |
+			<a href="{{ url_for('oneCatalogJSON', catalog_id = catalog.id) }}">View page in JSON</a>
+		</div>
+	</div>
+
+	{# lightbox #}
+		<script src="{{ url_for('static', filename='lightbox.min.js') }}"></script>
+	{# end lightbox #}
+{% endblock %}
