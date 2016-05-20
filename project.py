@@ -29,6 +29,8 @@ from werkzeug import secure_filename
 
 app = Flask(__name__)
 
+# BASE_PATH needs trailing slash: /
+BASE_PATH = "/var/www/html/photogallery/"
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog Catalog Application"
@@ -364,7 +366,7 @@ def menuItemJSON(catalog_id, item_id):
             name as the old image and overwrite it
         - each image will have a unique name
 '''
-UPLOAD_FOLDER = "/vagrant/catalog/uploads/photos"
+UPLOAD_FOLDER = BASE_PATH + "photogallery/uploads/photos"
 ALLOWED_EXTENSIONS = set(['jpg', 'png', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -566,21 +568,21 @@ def deleteCatalog(catalog_id):
         # delete images and thumbnails from /uploads
         for deleteThis in catalogItemsToDelete:
             os.remove(
-                "/vagrant/catalog/uploads/photos/" + deleteThis.item_image
+                BASE_PATH + "photogallery/uploads/photos/" + deleteThis.item_image
             )
             os.remove(
-                "/vagrant/catalog/uploads/photos/" + deleteThis.item_image_tn
+                BASE_PATH + "photogallery/uploads/photos/" + deleteThis.item_image_tn
             )
             # delete items from the database
             session.delete(deleteThis)
         # if there is a header image, delete the image and thumbnails
         if (catalogToDelete.header_image):
             os.remove(
-                    "/vagrant/catalog/uploads/photos/" +
+                    BASE_PATH + "photogallery/uploads/photos/" +
                     catalogToDelete.header_image
             )
             os.remove(
-                    "/vagrant/catalog/uploads/photos/" +
+                    BASE_PATH + "photogallery/uploads/photos/" +
                     catalogToDelete.header_image_tn
             )
         session.delete(catalogToDelete)
@@ -773,7 +775,7 @@ def deleteCatalogItem(catalog_id, item_id):
         if itemToDelete.item_image:
             print "image to delete: " + itemToDelete.item_image
             os.remove(
-                "/vagrant/catalog/uploads/photos/" + itemToDelete.item_image
+                BASE_PATH + "photogallery/uploads/photos/" + itemToDelete.item_image
             )
         # end delete image
         session.delete(itemToDelete)
