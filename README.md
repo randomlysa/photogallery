@@ -1,4 +1,13 @@
 # Setting up
+You may need to install the following:
+pip / sqlalchemy
+```
+sudo apt-get install python.pip
+sudo pip install sqlalchemy
+sudo pip install oauth2client
+```
+
+
 Run database_setup.py:
 ```
 python database_setup.py

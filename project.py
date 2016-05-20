@@ -104,13 +104,17 @@ def fbconnect():
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    access_token = request.data
-    print "access token received %s " % access_token
+    # short lived token (?)
+    short_access_token = request.data
+    print "access token received %s " % short_access_token
 
-    app_id = '982663518456759'
-    app_secret = 'c2e62854bbab79dab6cf56ed07d9385d'
+    app_id = 'YOUR_APP_ID' # update this line
+    app_secret = 'YOUR_APP_SECRET' # update this line
+
+    # get fb_exchange_token
+    # https://developers.facebook.com/docs/facebook-login/access-tokens/expiration-and-extension
     url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (  # nopep8
-        app_id, app_secret, access_token)
+        app_id, app_secret, short_access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
 
@@ -119,8 +123,10 @@ def fbconnect():
     # strip expire tag from access token
     token = result.split("&")[0]
 
-    url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' % token
+
+    url = 'https://graph.facebook.com/v2.6/me?%s&fields=name,id,email' % token
     h = httplib2.Http()
+    # this should be JSON formatted
     result = h.request(url, 'GET')[1]
     # print "url sent for API access:%s"% url
     # print "API JSON result: %s" % result
