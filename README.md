@@ -1,10 +1,13 @@
 # Setting up
 You may need to install the following:
-pip / sqlalchemy
+python-imaging, pip, sqlalchemy, oauth2client, Flask, requests
 ```
+sudo apt-get install python-imaging
 sudo apt-get install python.pip
 sudo pip install sqlalchemy
 sudo pip install oauth2client
+sudo pip install Flask
+sudo pip install requests
 ```
 
 
@@ -12,10 +15,7 @@ Run database_setup.py:
 ```
 python database_setup.py
 ```
-You may need to install python-imaging:
-```
-apt-get install python-imaging
-```
+
 Optional: add example catalog
 ```
 python example_catalog.py
