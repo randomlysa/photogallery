@@ -2,15 +2,17 @@
 
 ## Python / Requirements
 You may need to install the following:
-python-imaging, pip, sqlalchemy, oauth2client, Flask, requests
-`
+
+**python-imaging, pip, sqlalchemy, oauth2client, Flask, requests**
+
+```
 sudo apt-get install python-imaging
 sudo apt-get install python.pip
 sudo pip install sqlalchemy
 sudo pip install oauth2client
 sudo pip install Flask
 sudo pip install requests
-`
+```
 
 ## G+ Sign in
 
@@ -22,8 +24,8 @@ sudo pip install requests
 - Configure the consent screen if necessary and click Save.
 - For the Application type, select Web application.
 - Select a name, then add
-  - Authorized JavaScript origins: `http://localhost:5000`
-  - Authorized redirect URIs: `http://localhost:5000/login`, `http://localhost:5000/gconnect`
+  - Authorized JavaScript origins: **`http://localhost:5000`**
+  - Authorized redirect URIs:  **`http://localhost:5000/login`**, **`http://localhost:5000/gconnect`**
 - Click Create.
 - You should see your OAuth client ID and client secret.
 - In login.html, update `data-clientid="YOUR_CLIENT_ID_HERE"` with your client ID.
